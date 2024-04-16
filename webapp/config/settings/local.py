@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 
 DEBUG = True
@@ -5,7 +7,7 @@ DEBUG = True
 INSTALLED_APPS += [
     'debug_toolbar',
 ]
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "94n7fx27pd-!stt2fl@we!mn5=+-8l#!kber_j&p4s9hs+5w")
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware", ]
 
 INTERNAL_IPS = [
