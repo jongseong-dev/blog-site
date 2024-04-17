@@ -1,4 +1,4 @@
-name: Run Test on Pull Request
+name: Run Test and Lint on Pull Request
 
 on:
   push:
@@ -50,7 +50,7 @@ jobs:
           NAME: test_db
           USER: postgres
           PASSWORD: postgres
-          HOST: postgres
+          HOST: localhost
           PORT: 5432
         run: |
           cd webapp && pytest
