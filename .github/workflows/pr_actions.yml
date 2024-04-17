@@ -18,8 +18,14 @@ jobs:
       postgresql:
         image: postgres:15.6-alpine3.19
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         ports:
           - 5432:5432
     steps:
@@ -40,5 +46,11 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --max-complexity=10 --ignore=E402,F841,F401,E302,E305 --exclude=**/settings/** --max-line-length=127 --statistics
       - name: Test with pytest
+        env:
+          NAME: test_db
+          USER: postgres
+          PASSWORD: postgres
+          HOST: postgres
+          PORT: 5432
         run: |
           cd webapp && pytest
