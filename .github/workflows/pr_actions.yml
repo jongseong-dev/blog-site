@@ -14,7 +14,14 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [ 3.11 ]
-
+    services:
+      postgresql:
+        image: postgres:15.6-alpine3.19
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
