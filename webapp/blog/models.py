@@ -11,6 +11,11 @@ class DefaultFieldModel(models.Model):
         abstract = True
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
+
 class Post(DefaultFieldModel):
     class Status(models.TextChoices):
         DRAFT = "DF", "Draft"
@@ -30,6 +35,9 @@ class Post(DefaultFieldModel):
         # ex) user.blog_posts
         related_name="blog_posts",
     )
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     class Meta:
         ordering = ["-publish"]
