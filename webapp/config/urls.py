@@ -13,24 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
-
+from django.contrib import admin
 from django.http import JsonResponse
+from django.urls import include
+from django.urls import path
 
 
 def health_check(request):
-    return JsonResponse({'status': 'ok'})
+    return JsonResponse({"status": "ok"})
 
 
 urlpatterns = [
-    path('api-auth/', include('rest_framework.urls')),
-    path('admin/', admin.site.urls),
-    path('health/', health_check, name='health_check'),
-    path('blog/', include('blog.urls')),
+    path("api-auth/", include("rest_framework.urls")),
+    path("admin/", admin.site.urls),
+    path("health/", health_check, name="health_check"),
+    path("blog/", include("blog.urls", namespace="blog")),
 ]
 
 if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
-        urlpatterns += [path("__debug__/", include("debug_toolbar.urls")), ]
+        urlpatterns += [
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
