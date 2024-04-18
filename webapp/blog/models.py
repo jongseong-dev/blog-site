@@ -3,12 +3,15 @@ from django.db import models
 from django.utils import timezone
 
 
-class DefaultModel(models.Model):
+class DefaultFieldModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        abstract = True
 
-class Post(DefaultModel):
+
+class Post(DefaultFieldModel):
     class Status(models.TextChoices):
         DRAFT = "DF", "Draft"
         PUBLISHED = "PB", "Published"
