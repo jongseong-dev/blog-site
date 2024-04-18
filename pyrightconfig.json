@@ -11,6 +11,7 @@
   "typingsPath": "webapp/typestubs",
   "reportMissingImports": false,
   "reportMissingTypeStubs": false,
+  "reportIncompatibleVariableOverride": false,
   "pythonVersion": "3.12",
   "pythonPlatform": "Windows",
   "executionEnvironments": [
