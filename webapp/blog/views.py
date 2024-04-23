@@ -73,5 +73,5 @@ def post_share(request, post_id: int):
     return render(
         request,
         "blog/post/share.html",
-        {"post": post, "form": form, sent: sent},
+        {"post": post, "form": form, "sent": sent},
     )
