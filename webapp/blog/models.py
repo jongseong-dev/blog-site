@@ -58,4 +58,12 @@ class Post(DefaultFieldModel):
         다른 layer 에서 해당 모델의 method를 통해 post_detail URL을 얻을 수 있음
         :return:
         """
-        return reverse("blog:post_detail", args=[self.id])
+        return reverse(
+            "blog:post_detail",
+            args=[
+                self.publish.year,
+                self.publish.month,
+                self.publish.day,
+                self.slug,
+            ],
+        )
