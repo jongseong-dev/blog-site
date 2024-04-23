@@ -25,6 +25,7 @@ black = "^24.4.0"
 
 [tool.poetry.group.dev.dependencies]
 django-debug-toolbar = "^4.3.0"
+ipython = "^8.23.0"
 
 
 [tool.poetry.group.test.dependencies]

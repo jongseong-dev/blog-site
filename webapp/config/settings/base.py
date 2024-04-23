@@ -119,3 +119,10 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ]
 }
+
+# SMTP 서버 구성
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "dlwhdtjd098@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", True)
