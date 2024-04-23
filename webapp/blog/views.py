@@ -6,6 +6,7 @@ from django.http import Http404
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.views.generic import ListView
 
 
 def post_list(request):
@@ -23,6 +24,18 @@ def post_list(request):
     return render(
         request, "blog/post/list.html", {"posts": posts_with_pagination}
     )
+
+
+class PostListView(ListView):
+    """
+    Alternative post list view
+    """
+
+    queryset = Post.published.all()
+    # 컨텍스트 변수로 "posts"를 지정한다. 지정하지 않을 경우 기본 변수는 "object_list"이다.
+    context_object_name = "posts"
+    paginate_by = 3
+    template_name = "blog/post/list.html"
 
 
 def post_detail(request, year: int, month: int, day: int, post: Post):
