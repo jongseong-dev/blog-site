@@ -17,6 +17,7 @@ class PostFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("title",)
 
     title = factory.Sequence(lambda n: f"Post {n}")
+    slug = factory.Sequence(lambda n: f"post-{n}")
     publish = factory.LazyFunction(timezone.now)
     author = factory.SubFactory(UserFactory)
     body = factory.Sequence(lambda n: f"Body {n}")
