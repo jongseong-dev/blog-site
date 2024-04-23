@@ -1,4 +1,7 @@
+from blog.forms import EmailPostForm
 from blog.models import Post
+from django.conf import settings
+from django.core.mail import send_mail
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
@@ -48,3 +51,27 @@ def post_detail(request, year: int, month: int, day: int, post: Post):
         status=Post.Status.PUBLISHED,
     )
     return render(request, "blog/post/detail.html", {"post": post})
+
+
+def post_share(request, post_id: int):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    sent = False
+    if request.method == "POST":
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} recommends you read {post.title}"
+            message = (
+                f"Read {post.title} at {post_url}\n\n"
+                f"{cd['name']}'s comments: {cd['comments']}"
+            )
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [cd["to"]])
+            sent = True
+    else:
+        form = EmailPostForm()
+    return render(
+        request,
+        "blog/post/share.html",
+        {"post": post, "form": form, "sent": sent},
+    )
