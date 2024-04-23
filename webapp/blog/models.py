@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -47,3 +48,11 @@ class Post(DefaultFieldModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """
+        객체의 표준 URL을 반환
+        다른 layer 에서 해당 모델의 method를 통해 post_detail URL을 얻을 수 있음
+        :return:
+        """
+        return reverse("blog:post_detail", args=[self.id])
