@@ -2,9 +2,25 @@
 
 - "예제로 배우는 Django 4" 책을 보고 만든 예제 Repo
 
+<!-- TOC -->
+
+* [blog-site](#blog-site)
+* [프로젝트 시작하기](#프로젝트-시작하기)
+    * [필요한 의존성 세팅하기](#필요한-의존성-세팅하기)
+        * [1. 패키지 설치](#1-패키지-설치)
+        * [2. DB 설치 후 migration](#2-db-설치-후-migration)
+        * [3. Django 실행하기](#3-django-실행하기)
+        * [4. Django test 실행하기](#4-django-test-실행하기)
+    * [docker-compose 실행](#docker-compose-실행)
+        * [1. docker-compose 서비스 실행](#1-docker-compose-서비스-실행)
+        * [2. docker-compose 서비스 종료](#2-docker-compose-서비스-종료)
+    * [환경변수](#환경변수)
+
+<!-- TOC -->
+
 # 프로젝트 시작하기
 
-## 가상환경 설정
+## 필요한 요소 세팅 및 Django App 실행하기
 
 - 들어가기에 앞서 `poetry`와 `docker`를 설치해주세요.
     - poetry 설치 방법: https://python-poetry.org/docs/#installation
@@ -66,7 +82,7 @@
 
 - 만약 test 가 제대로 실행되지 않는다면 pytest의 실행 위치가 `webapp` 디렉토리인지 확인해주세요.
 
-## docker-compose 실행
+## 번외. docker-compose로 실행하기
 
 - 만약 docker-compose를 통해 Django를 실행시키고 싶다면 steps를 따라주세요.
 
