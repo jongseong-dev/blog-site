@@ -88,3 +88,26 @@
   docker-compose down
   ```
 
+## 환경변수
+
+1. DB
+
+| 변수명         | 기본값       |
+|-------------|-----------|
+| DB_NAME     | postgres  |
+| DB_USER     | postgres  |
+| DB_PASSWORD | postgres  |
+| DB_HOST     | localhost |
+| DB_PORT     | 5432      |
+
+2. EMAIL
+
+| 변수명                 | 기본값                   |
+|---------------------|-----------------------|
+| EMAIL_HOST_PASSWORD | 없음                    |
+| EMAIL_HOST          | smtp.gmail.com        |
+| EMAIL_HOST_USER     | dlwhdtjd098@gmail.com |
+| EMAIL_PORT          | 587                   |
+| EMAIL_USE_TLS       | True                  |
+
+
