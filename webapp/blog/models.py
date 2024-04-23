@@ -23,7 +23,10 @@ class Post(DefaultFieldModel):
         PUBLISHED = "PB", "Published"
 
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250)  # 문자, 숫자, 밑줄 또는 하이픈만 포함하는 짧은 레이블
+    slug = models.SlugField(
+        max_length=250,
+        unique_for_date="publish",  # 게시물의 게시 날짜를 기준으로 슬러그를 고유하게 정의하도록 함
+    )  # 문자, 숫자, 밑줄 또는 하이픈만 포함하는 짧은 레이블
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(

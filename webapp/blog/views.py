@@ -10,6 +10,13 @@ def post_list(request):
     return render(request, "blog/post/list.html", {"posts": posts})
 
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk, status=Post.Status.PUBLISHED)
+def post_detail(request, year: int, month: int, day: int, post: Post):
+    post = get_object_or_404(
+        Post,
+        publish__year=year,
+        publish__month=month,
+        publish__day=day,
+        slug=post,
+        status=Post.Status.PUBLISHED,
+    )
     return render(request, "blog/post/detail.html", {"post": post})
