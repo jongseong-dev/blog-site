@@ -31,20 +31,21 @@ RUN chmod +x /mysite/entrypoint.sh
 ENTRYPOINT ["/mysite/entrypoint.sh"]
 
 # 세 번째 단계: 빌드
-FROM python:3.11-alpine as local
+FROM python:3.11-alpine as deploy
 
 WORKDIR /mysite
 
 # 환경변수 설정
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DJANGO_SETTINGS_MODULE=config.settings.local
 # 의존성 설치
 COPY --from=builder /mysite/requirements.txt /mysite/
 RUN pip install -r requirements.txt
 
 # 프로젝트 코드 복사
 COPY . /mysite
+
+EXPOSE 8000
 
 # entrypoint.sh 파일 실행
 RUN chmod +x /mysite/entrypoint.sh

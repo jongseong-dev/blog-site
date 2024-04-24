@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: local
+      target: deploy
     volumes:
       - .:/mysite
     ports:
@@ -26,6 +26,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_HOST=db
       - DB_PORT=5432
+      - DJANGO_SETTINGS_MODULE=config.settings.local
     depends_on:
       - db
   test_web:
