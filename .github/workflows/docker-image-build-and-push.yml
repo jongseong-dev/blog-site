@@ -32,8 +32,8 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          echo "::set-output name=DATE::$(date +'%Y.%m.%d')"
-          echo "::set-output name=TIME::$(date +'%H.%M.%S')"
+          echo "::set-output name=DATE::$(date +'%Y%m%d')"
+          echo "::set-output name=TIME::$(date +'%H%M%S')"
           echo "::set-output name=HASH::$(git rev-parse --short=4 HEAD)"
 
       - name: Build and push Docker image
