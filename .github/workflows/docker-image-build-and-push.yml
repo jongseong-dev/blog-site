@@ -31,13 +31,13 @@ jobs:
 
       - name: Get the version
         id: get_version
-        env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          RUN_NUMBER: ${{ github.run_number }}
         run: |
           echo "::set-output name=DATE::$(date +'%Y%m%d')"
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          RUN_NUMBER: ${{ github.run_number }}
         with:
           context: .
           push: true
