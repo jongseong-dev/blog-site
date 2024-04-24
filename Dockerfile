@@ -45,6 +45,8 @@ RUN pip install -r requirements.txt
 # 프로젝트 코드 복사
 COPY . /mysite
 
+EXPOSE 8000
+
 # entrypoint.sh 파일 실행
 RUN chmod +x /mysite/entrypoint.sh
 ENTRYPOINT ["/mysite/entrypoint.sh"]
