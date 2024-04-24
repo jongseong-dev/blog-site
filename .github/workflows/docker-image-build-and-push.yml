@@ -30,10 +30,11 @@ jobs:
         run: |
           echo "::set-output name=YEAR::$(date +'%y')"
           echo "::set-output name=DATE::$(date +'%m%d')"
+          echo "::set-output name=HASH::$(git rev-parse --short=4 HEAD)"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.YEAR }}.${{ steps.get_version.outputs.DATE }}${{ github.run_number  }}.${{ github.event.number  }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.YEAR }}.${{ steps.get_version.outputs.DATE }}.${{ steps.get_version.outputs.HASH  }}
