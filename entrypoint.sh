@@ -12,4 +12,8 @@ if [ "$DJANGO_SETTINGS_MODULE" = "config.settings.local" ]; then
   python manage.py runserver 0.0.0.0:8000
 elif [ "$DJANGO_SETTINGS_MODULE" = "config.settings.test" ]; then
   python manage.py test
+elif [ "$DJANGO_SETTINGS_MODULE" = "config.settings.prod" ]; then
+  python manage.py migrate
+  python manage.py collectstatic
+  gunicorn --bind 0:8000 webapp.wsgi:application
 fi
