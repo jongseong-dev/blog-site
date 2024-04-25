@@ -259,6 +259,20 @@ files = [
 Django = ">=4.2"
 
 [[package]]
+name = "django-taggit"
+version = "3.0.0"
+description = "django-taggit is a reusable Django application for simple tagging."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "django-taggit-3.0.0.tar.gz", hash = "sha256:e645b8e3dd4f85989d5ef5c5a3d5ebbe5badf5d1e51b53e42d0af726240b00b9"},
+    {file = "django_taggit-3.0.0-py3-none-any.whl", hash = "sha256:ca2df20399a11321db75988404afb640a08eff61e52bde35f6c16f307004ec9e"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "djangorestframework"
 version = "3.15.1"
 description = "Web APIs for Django, made easy."
@@ -1127,4 +1141,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "9769d9345894c997256f2c8fa81deccf9c3153532966571147ccbc87499001f8"
+content-hash = "7aa1ee4753935fb129a85861ac1d51ad284a3e93e360f9da226a91354fb64698"

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # libs
     "rest_framework",
     "django_filters",
+    "taggit",
     # apps
     "blog.apps.BlogConfig",
 ]
