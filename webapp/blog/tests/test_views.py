@@ -1,5 +1,6 @@
 from blog.factory import PostFactory
 from blog.forms import EmailPostForm
+from blog.models import Comment
 from blog.models import Post
 from blog.views import post_share
 from django.http import Http404
@@ -79,4 +80,43 @@ class PostShareViewTest(TestCase):
     def test_get_post_share_404_NOT_FOUND(self):
         Post.objects.all().delete()
         response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class PostCommentViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.post = PostFactory.create()
+        self.url = reverse("blog:post_comment", args=[self.post.id])
+
+    def test_post_comment_200_OK(self):
+        response = self.client.post(
+            self.url,
+            {
+                "name": "Test User",
+                "email": "testuser@example.com",
+                "body": "This is a test comment.",
+            },
+        )
+        self.assertTemplateUsed(response, "blog/post/comment.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Comment.objects.count(), 1)
+
+    def test_post_comment_NOT_VALID_INPUT(self):
+        response = self.client.post(
+            self.url, {"name": "", "email": "not an email", "body": ""}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Comment.objects.count(), 0)
+
+    def test_post_comment_404_NOT_FOUND(self):
+        url = reverse("blog:post_comment", args=[1000])
+        response = self.client.post(
+            url,
+            {
+                "name": "Test User",
+                "email": "testuser@example.com",
+                "body": "This is a test comment.",
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
