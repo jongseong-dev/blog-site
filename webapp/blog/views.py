@@ -1,3 +1,4 @@
+from blog.forms import CommentForm
 from blog.forms import EmailPostForm
 from blog.models import Post
 from django.conf import settings
@@ -9,6 +10,7 @@ from django.http import Http404
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 
 
@@ -74,4 +76,23 @@ def post_share(request, post_id: int):
         request,
         "blog/post/share.html",
         {"post": post, "form": form, "sent": sent},
+    )
+
+
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    comment = None
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        # 데이터베이스에 저장하지 않고 Comment 객체 만들기
+        comment = form.save(commit=False)
+        # 댓글에 게시물 할당하기
+        comment.post = post
+        # 댓글을 데이터베이스에 저장
+        comment.save()
+    return render(
+        request,
+        "blog/post/comment.html",
+        {"post": post, "form": form, "comment": comment},
     )
