@@ -8,7 +8,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,15 +25,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Get the version
-        id: get_version
+        id: get-version
         run: |
-          echo "::set-output name=YEAR::$(date +'%y')"
-          echo "::set-output name=DATE::$(date +'%m%d')"
-          echo "::set-output name=HASH::$(git rev-parse --short=4 HEAD)"
-
+          echo "YEAR=$(date +'%y')" >> "$GITHUB_OUTPUT"
+          echo "DATE=$(date +'%m%d')" >> "$GITHUB_OUTPUT"
+          echo "HASH=$(git rev-parse --short=4 HEAD)" >> "$GITHUB_OUTPUT"
+          
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ steps.get_version.outputs.YEAR }}.${{ steps.get_version.outputs.DATE }}.${{ steps.get_version.outputs.HASH  }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ steps.get-version.outputs.YEAR }}.${{ steps.get-version.outputs.DATE }}.${{ steps.get-version.outputs.HASH }}
