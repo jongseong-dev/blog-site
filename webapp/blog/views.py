@@ -12,10 +12,15 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from taggit.models import Tag
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     posts = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
     paginator = Paginator(posts, 3)
     page_number = request.GET.get("page", 1)
     try:
@@ -27,7 +32,9 @@ def post_list(request):
         # 페이지 번호가 범위를 벗어난 경우 결과의 마지막 페이지를 전달
         posts_with_pagination = paginator.page(paginator.num_pages)
     return render(
-        request, "blog/post/list.html", {"posts": posts_with_pagination}
+        request,
+        "blog/post/list.html",
+        {"posts": posts_with_pagination, "tag": tag},
     )
 
 
