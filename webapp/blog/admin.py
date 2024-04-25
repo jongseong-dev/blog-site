@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .models import Comment
 from .models import Post
 
 
@@ -17,3 +18,10 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ("author",)  #
     date_hierarchy = "publish"  # 연월일 단계로 날짜를 고를 수 있는 네비게이션 링크
     ordering = ("status", "publish")
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "post", "created_at", "active")
+    list_filter = ("active", "created_at", "updated_at")
+    search_fields = ("name", "email", "body")
