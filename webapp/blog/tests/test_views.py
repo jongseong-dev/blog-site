@@ -1,31 +1,49 @@
-from blog.factory import PostFactory
-from blog.forms import EmailPostForm
-from blog.models import Comment
-from blog.models import Post
-from blog.views import post_share
-from django.http import Http404
+from random import randint
+
 from django.test import Client
-from django.test import RequestFactory
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
+from blog.factory import PostFactory
+from blog.factory import TagFactory
+from blog.models import Comment
+from blog.models import Post
+
 
 class PostListViewTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.post_list = PostFactory.create_batch(10)
-        self.url = reverse("blog:post_list")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.client = Client()
+        cls.tags = [TagFactory() for _ in range(randint(1, 3))]
+        cls.post_list = PostFactory.create_batch(10)
+        cls.url = reverse("blog:post_list")
+        cls.url_with_tag = reverse(
+            "blog:post_list_by_tag", args=[cls.tags[-1]]
+        )
 
-    def test_post_list_200_OK(self):
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+
+    def test_get_post_list_200_OK(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "blog/post/list.html")
         self.assertEqual(len(response.context["posts"]), 3)
 
-    def test_post_list_404_NOT_FOUND(self):
+    def test_get_post_list_404_NOT_FOUND(self):
         response = self.client.get(self.url, {"page": 1000})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_post_list_filter_by_tag(self):
+        response_with_tag = self.client.get(self.url_with_tag)
+        self.assertEqual(response_with_tag.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            Post.published.filter(tags__in=[self.tags[-1]]).count(),
+            response_with_tag.context["posts"].paginator.count,
+        )
 
 
 class PostDetailViewTest(TestCase):
@@ -41,6 +59,10 @@ class PostDetailViewTest(TestCase):
                 self.post.slug,
             ],
         )
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
 
     def test_post_detail_404_NOT_FOUND(self):
         Post.objects.all().delete()
@@ -58,6 +80,10 @@ class PostShareViewTest(TestCase):
         self.client = Client()
         self.post = PostFactory.create()
         self.url = reverse("blog:post_share", args=[self.post.id])
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
 
     def test_get_post_share_200_OK(self):
         response = self.client.get(self.url)
@@ -88,6 +114,10 @@ class PostCommentViewTest(TestCase):
         self.client = Client()
         self.post = PostFactory.create()
         self.url = reverse("blog:post_comment", args=[self.post.id])
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
 
     def test_post_comment_200_OK(self):
         response = self.client.post(
