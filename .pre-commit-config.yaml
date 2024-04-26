@@ -37,3 +37,13 @@ repos:
     hooks:
       - id: pyright
         types: [ python ]
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        types: [ python ]
+        args:
+          - --config-file=webapp/pytest.ini
