@@ -14,15 +14,6 @@ repos:
     hooks:
       - id: setup-cfg-fmt
         types: [ python ]
-  - repo: https://github.com/asottile/reorder-python-imports
-    rev: v3.12.0
-    hooks:
-      - id: reorder-python-imports
-        args: [
-          --application-directories, '.:src',
-          --py311-plus,
-        ]
-        types: [ python ]
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.15.0
     hooks:
