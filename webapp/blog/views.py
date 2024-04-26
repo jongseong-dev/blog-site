@@ -7,6 +7,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
@@ -24,12 +25,9 @@ def post_list(request, tag_slug=None):
     page_number = request.GET.get("page", 1)
     try:
         posts_with_pagination = paginator.page(page_number)
-    except PageNotAnInteger:
-        # 페이지 번호가 정수가 아닌 경우 결과의 첫 페이지를 전달
-        posts_with_pagination = paginator.page(1)
-    except EmptyPage:
+    except (EmptyPage, PageNotAnInteger):
         # 페이지 번호가 범위를 벗어난 경우 결과의 마지막 페이지를 전달
-        posts_with_pagination = paginator.page(paginator.num_pages)
+        raise Http404
     return render(
         request,
         "blog/post/list.html",
