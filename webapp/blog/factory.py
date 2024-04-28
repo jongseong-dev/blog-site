@@ -7,7 +7,7 @@ from django.utils.text import slugify
 from faker import Faker
 from taggit.models import Tag
 
-from blog.models import Post
+from blog.models import Post, Comment
 
 fake = Faker()
 
@@ -53,3 +53,14 @@ class PostFactory(factory.django.DjangoModelFactory):
         :return:
         """
         instance.tags.set(TagFactory.create_batch(randint(1, 3)))
+
+
+class CommentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Comment
+
+    post = factory.SubFactory(PostFactory)
+    name = factory.Sequence(lambda n: f"Name {n}")
+    email = factory.Sequence(lambda n: f"email{n}@email.com")
+    body = factory.Sequence(lambda n: f"Content {n}")
+    active = True
