@@ -6,28 +6,32 @@ from django.core.mail import send_mail
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import Http404
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from taggit.models import Tag
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     posts = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
     paginator = Paginator(posts, 3)
     page_number = request.GET.get("page", 1)
     try:
         posts_with_pagination = paginator.page(page_number)
-    except PageNotAnInteger:
-        # 페이지 번호가 정수가 아닌 경우 결과의 첫 페이지를 전달
-        posts_with_pagination = paginator.page(1)
-    except EmptyPage:
+    except (EmptyPage, PageNotAnInteger):
         # 페이지 번호가 범위를 벗어난 경우 결과의 마지막 페이지를 전달
-        posts_with_pagination = paginator.page(paginator.num_pages)
+        raise Http404
     return render(
-        request, "blog/post/list.html", {"posts": posts_with_pagination}
+        request,
+        "blog/post/list.html",
+        {"posts": posts_with_pagination, "tag": tag},
     )
 
 
@@ -54,10 +58,22 @@ def post_detail(request, year: int, month: int, day: int, post: Post):
     )
     comments = post.comments.filter(active=True)
     form = CommentForm()
+    post_tags_ids = post.tags.values_list("id", flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(
+        id=post.id
+    )
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags", "-publish"
+    )[:4]
     return render(
         request,
         "blog/post/detail.html",
-        {"post": post, "comments": comments, "form": form},
+        {
+            "post": post,
+            "comments": comments,
+            "form": form,
+            "similar_posts": similar_posts,
+        },
     )
 
 
