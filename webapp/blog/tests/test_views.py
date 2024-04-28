@@ -13,8 +13,7 @@ from blog.models import Post
 
 class PostListViewTest(TestCase):
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUpTestData(cls):
         cls.client = Client()
         cls.tags = [TagFactory() for _ in range(randint(1, 3))]
         cls.post_list = PostFactory.create_batch(10)
