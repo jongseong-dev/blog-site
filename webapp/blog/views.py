@@ -3,6 +3,7 @@ from django.contrib.postgres.search import (
     SearchVector,
     SearchQuery,
     SearchRank,
+    TrigramSimilarity,
 )
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage
@@ -16,7 +17,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from taggit.models import Tag
 
-from blog.forms import CommentForm, SearchForm
+from blog.forms import CommentForm, SearchForm, SEARCH_TYPE_CHOICES
 from blog.forms import EmailPostForm
 from blog.models import Post
 
@@ -135,20 +136,29 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data["query"]
-            search_vector_title = SearchVector("title", weight="A")
-            search_vector_body = SearchVector("body", weight="B")
-            search_vector = (
-                search_vector_title + search_vector_body
-            )  # 제목의 일치가 본문의 일치보다 우선한다.
-            search_query = SearchQuery(query, config="english")
-            results = (
-                Post.published.annotate(
-                    search=search_vector,
-                    rank=SearchRank(search_vector, search_query),
+            if form.cleaned_data["type"] == SEARCH_TYPE_CHOICES[1][0]:
+                results = (
+                    Post.published.annotate(
+                        similarity=TrigramSimilarity("title", query)
+                    )
+                    .filter(similarity__gt=0.1)
+                    .order_by("-similarity")
                 )
-                .filter(rank__gte=0.3)  # 결과를 필터링해서 순위가 0.3 보다 높은 항목만 표시
-                .order_by("-rank")
-            )
+            else:
+                search_vector_title = SearchVector("title", weight="A")
+                search_vector_body = SearchVector("body", weight="B")
+                search_vector = (
+                    search_vector_title + search_vector_body
+                )  # 제목의 일치가 본문의 일치보다 우선한다.
+                search_query = SearchQuery(query, config="english")
+                results = (
+                    Post.published.annotate(
+                        search=search_vector,
+                        rank=SearchRank(search_vector, search_query),
+                    )
+                    .filter(rank__gte=0.3)  # 결과를 필터링해서 순위가 0.3 보다 높은 항목만 표시
+                    .order_by("-rank")
+                )
     return render(
         request,
         "blog/post/search.html",
