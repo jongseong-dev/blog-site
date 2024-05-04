@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -23,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ALLOWED_HOSTS = []
 
 # Application definition
+SITE_ID = 1  # 현재 사이트를 식별하는 데 사용한다. 기본값은 1이다.
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -35,6 +37,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "taggit",
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
     # apps
     "blog.apps.BlogConfig",
 ]
