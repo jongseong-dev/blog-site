@@ -135,14 +135,18 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data["query"]
-            search_vector = SearchVector("title", "body")
+            search_vector_title = SearchVector("title", weight="A")
+            search_vector_body = SearchVector("body", weight="B")
+            search_vector = (
+                search_vector_title + search_vector_body
+            )  # 제목의 일치가 본문의 일치보다 우선한다.
             search_query = SearchQuery(query, config="english")
             results = (
                 Post.published.annotate(
                     search=search_vector,
                     rank=SearchRank(search_vector, search_query),
                 )
-                .filter(search=search_query)
+                .filter(rank__gte=0.3)  # 결과를 필터링해서 순위가 0.3 보다 높은 항목만 표시
                 .order_by("-rank")
             )
     return render(
