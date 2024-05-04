@@ -11,7 +11,7 @@
         </h3>
         {% for post in results %}
             <h4>
-                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a><
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
             </h4>
             {{ post.body|markdown|truncatewords_html:12 }}
         {% empty %}
