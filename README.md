@@ -6,15 +6,19 @@
 
 * [blog-site](#blog-site)
 * [프로젝트 시작하기](#프로젝트-시작하기)
-    * [필요한 의존성 세팅하기](#필요한-의존성-세팅하기)
+    * [필요한 요소 세팅 및 Django App 실행하기](#필요한-요소-세팅-및-django-app-실행하기)
         * [1. 패키지 설치](#1-패키지-설치)
         * [2. DB 설치 후 migration](#2-db-설치-후-migration)
         * [3. Django 실행하기](#3-django-실행하기)
         * [4. Django test 실행하기](#4-django-test-실행하기)
-    * [docker-compose 실행](#docker-compose-실행)
+    * [번외. docker-compose로 실행하기](#번외-docker-compose로-실행하기)
         * [1. docker-compose 서비스 실행](#1-docker-compose-서비스-실행)
         * [2. docker-compose 서비스 종료](#2-docker-compose-서비스-종료)
     * [환경변수](#환경변수)
+        * [Django Config](#django-config)
+        * [DB](#db)
+        * [EMAIL](#email)
+* [프로젝트의 기능 소개](#프로젝트의-기능-소개)
 
 <!-- TOC -->
 
