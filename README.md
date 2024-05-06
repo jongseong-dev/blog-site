@@ -19,6 +19,7 @@
         * [DB](#db)
         * [EMAIL](#email)
 * [프로젝트의 기능 소개](#프로젝트의-기능-소개)
+* [CI](#ci)
 
 <!-- TOC -->
 
@@ -153,3 +154,8 @@
     - 쿼리에 가중치 부여하기
         - 검색 결과를 관련성에 따라 정렬할 때 특정 벡터의 가중치를 높일 수 있다.
     - 트라이그램 유사성 이용하여 검색기능
+
+# CI
+
+- 현재 github actions를 통해 docker hub로 이미지를 빌드하고 있음.
+- 이미지 태그에 대한 고찰: https://jongseong-dev.github.io/today-learn/study/20240424-TL/
